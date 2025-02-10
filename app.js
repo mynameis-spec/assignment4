@@ -47,7 +47,7 @@ app.set('view engine', 'ejs')
 
 const adminRouter = require('./routes/admin')
 const {models} = require("mongoose");
-app.use('/admin', adminRouter) // app.use('/admin', authAdmin, adminRouter)
+app.use('/admin', authAdmin, adminRouter) // app.use('/admin', authAdmin, adminRouter)
 
 mongoose.connect(uri).then(() => console.log('Connected to MongoDB'))
     .catch(err => console.log(err))
@@ -76,7 +76,7 @@ app.get('/weather', authUser, async (req, res) => {
     res.render('weather', {CURRENT: dt_txt.substring(11, 19), TEMP: temp, FEEL: feels_like,
         HUM: humidity, PRESS: pressure, WIND: windSpeed, CODE:country, DESC:description, ICON:icon})
 })
-app.get('/mainPage', (req, res) => {
+app.get('/mainPage', authUser, (req, res) => {
 
     Items.find().then(items => {
         res.render('mainPage', {items: items})
