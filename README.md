@@ -9,6 +9,7 @@ password: arsen
 
 ## DESCRIPTION
 Anime Watchlist is a web application that helps users keep track of their favorite anime series and movies. Users can add, update, and delete anime from their personal watchlist
+## PASSWORD HASHING
 we hashed passwords using bcrypt
 ## Installation
 
