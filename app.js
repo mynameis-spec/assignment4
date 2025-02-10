@@ -119,17 +119,24 @@ app.get('/logout', (req, res) => {
     req.session.adminStatus = false
     res.redirect('/')
 })
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
     const {username, password} = req.body
+        await Users.find().then((models) => {
 
-        Users.find().then((models) => {
-            let findOne = false
+            let have = false
             for (let i = 0; i < models.length; i++) {
-                if(findOne)break;
                 if(models[i].username == username){
-                    bcrypt.compare(password, models[i].password, function(err, result) {
+                    have = true
+                }
+            }
+            if(!have){
+                res.redirect('/')
+            }
+            for (let i = 0; i < models.length; i++) {
+                if(models[i].username == username){
+                     bcrypt.compare(password, models[i].password, function(err, result) {
                         if (result) {
-                            findOne = true
+                            change = false
                             isAdmin = models[i].adminStatus
                             req.session.user = username
                             req.session.adminStatus = models[i].adminStatus
@@ -141,6 +148,7 @@ app.post('/login', (req, res) => {
                 }
             }
         })
+
 })
 //app.get('/admin', (req, res) => {res.render('admin')})
 app.listen(PORT, () =>{
